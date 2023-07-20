@@ -1,0 +1,44 @@
+#app{
+    height: 100vh;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+.c_container_outer
+{
+    height: 100%; 
+    width: 100%; 
+    background-color: gray;
+}
+.c_header{
+    height: 48px;
+    background-color: #1a1a1b;
+    color: white;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+.c_header_pad{
+    padding: 0px 20px;
+    display: flex;
+    justify-content: space-around;
+}
+.c_body{
+    margin-top: 48px;
+    min-height: 90%;
+    background-color: gray;
+}
+.btn{
+    vertical-align: top;
+    padding: 12px;
+    display: inline-block;
+    border: solid;
+}
+.btn-right{
+    float: right;
+}
+.c_icon{
+    color: white;
+    font-size: 36px;
+}
