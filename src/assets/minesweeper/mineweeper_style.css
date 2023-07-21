@@ -29,6 +29,12 @@
     grid-template-rows: 25% 25% 25% 25%;
 }
 .m_cell{
-    background-color: aqua;
+    background-color: rgb(205, 212, 212);
     border: solid;
+}
+.m_clicked_empty{
+    background-color: gray;
+}
+.m_deadcell{
+    background-color: red;
 }
