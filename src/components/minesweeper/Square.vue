@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import {ref} from 'vue'
+    import {ref, computed} from 'vue'
     const props = defineProps({
         mode: {
             type: Number,
@@ -22,7 +22,7 @@
             default: 0
         } 
     })
-    const neighbours = ref(0)
+    const neighbours = computed(()=>{if (props.vis == 1) return props.neighbour_handler(props.pos); else return 0;})
     const avail = ref(true)
     const killer = ref(false)
     function handle()
@@ -31,9 +31,7 @@
         {
             avail.value = false
             let keep:boolean = props.click_handler(props.pos)
-            if (keep)
-                neighbours.value = props.neighbour_handler(props.pos)
-            else
+            if (!keep)
                 killer.value = true
         }
     }
@@ -42,8 +40,7 @@
     <div 
      :class="{m_cell: true, m_clicked_empty: props.vis == 1, m_deadcell: killer}"
      @click="handle()">
-       <!--{{ props.mode }} -->
-        <span v-if="props.mode == 0 && neighbours > 0">
+        <span v-if="props.mode == 0 && props.vis == 1 && neighbours > 0">
             {{neighbours}} 
         </span>
         <span v-if="props.vis == 1 && props.mode == 1">

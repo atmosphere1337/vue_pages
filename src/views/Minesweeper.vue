@@ -52,6 +52,19 @@
         out += (y + 1 >= height.value || x - 1 < 0) ? 0 : map.value[y + 1][x - 1]
         return out
     }
+    function scan_neighbours():number[][]
+    {
+        let out:number[][] = createArray(height.value, width.value)
+        for (let i = 0; i < height.value; i++)
+            for (let j = 0; j < width.value; j++)
+            {
+                if (map.value[i][j] == 1)
+                    out[i][j] = 9
+                else 
+                    out[i][j] = check_neighbours(i * width.value + j)
+            }
+        return out
+    }
     function press_click(counter:number):boolean
     {
         let y:number = Math.floor(counter/width.value)
@@ -72,6 +85,7 @@
     }
     const map = ref(createMap(height.value,width.value,bombs.value))
     const map_visible = ref(createArray(height.value, width.value))
+    const map_neighbour = computed(()=>{return scan_neighbours()})
     const line_map = computed(()=>{return map.value.reduce((a:number[], b:number[])=>a.concat(b), [])})
     const line_map_visible = computed(()=>{return map_visible.value.reduce((a:number[], b:number[])=>a.concat(b), [])})
     
