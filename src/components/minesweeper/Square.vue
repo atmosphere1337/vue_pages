@@ -9,10 +9,6 @@
             type: Function,
             default: ()=>{},
         },
-        neighbour_handler: {
-            type: Function,
-            default: ()=>{}
-        },
         pos: {
             type: Number,
             default: 0
@@ -20,9 +16,12 @@
         vis: {
             type: Number,
             default: 0
-        } 
+        },
+        neighbours: {
+            type: Number,
+            default: 0
+        }
     })
-    const neighbours = computed(()=>{if (props.vis == 1) return props.neighbour_handler(props.pos); else return 0;})
     const avail = ref(true)
     const killer = ref(false)
     function handle()
@@ -39,8 +38,9 @@
 <template>
     <div 
      :class="{m_cell: true, m_clicked_empty: props.vis == 1, m_deadcell: killer}"
+     :style="{textAlign: 'center'}"
      @click="handle()">
-        <span v-if="props.mode == 0 && props.vis == 1 && neighbours > 0">
+        <span v-if="props.mode == 0 && props.vis == 1 && props.neighbours > 0" style="font-size: 28px;">
             {{neighbours}} 
         </span>
         <span v-if="props.vis == 1 && props.mode == 1">

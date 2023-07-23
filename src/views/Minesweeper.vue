@@ -65,11 +65,42 @@
             }
         return out
     }
+    function extending(y:number, x:number)
+    {
+        if (map_visible.value[y][x] == 1 || map.value[y][x] == 1)
+            return
+        if (map_neighbour.value[y][x] > 0 && map_neighbour.value[y][x] < 9)
+        {
+            map_visible.value[y][x] = 1
+            return
+        }
+        if (map_neighbour.value[y][x] == 0 && map_visible.value[y][x] == 0)
+        {
+            map_visible.value[y][x] = 1
+            if (y < height.value - 1 && map_neighbour.value[y + 1][x] < 9)
+                extending(y + 1, x)
+            if (y > 0 && map_neighbour.value[y - 1][x] < 9)
+                extending(y - 1, x)
+            if (x < width.value - 1 && map_neighbour.value[y][x + 1] < 9)
+                extending(y, x + 1)
+            if (x > 0 && map_neighbour.value[y][x - 1] < 9)
+                extending(y, x - 1)
+
+            if (y < height.value - 1 && x < width.value - 1 &&  map_neighbour.value[y + 1][x + 1] < 9)
+                extending(y + 1, x + 1)
+            if (y > 0 && x > 0 && map_neighbour.value[y - 1][x - 1] < 9)
+                extending(y - 1, x - 1)
+            if (x < width.value - 1 && y > 0 && map_neighbour.value[y - 1][x + 1] < 9)
+                extending(y - 1, x + 1)
+            if (x > 0 && y < height.value - 1 && map_neighbour.value[y][x - 1] < 9)
+                extending(y + 1, x - 1)
+        }
+        return 
+    }
     function press_click(counter:number):boolean
     {
         let y:number = Math.floor(counter/width.value)
         let x:number = counter % height.value
-        map_visible.value[y][x] = 1
         if (line_map.value[counter] == 1)
         {
             for (let i:number = 0; i < height.value; i++)
@@ -81,6 +112,10 @@
             alert('you lost')
             return false
         }
+        if (line_map_neighbour.value[counter] == 0)
+            extending(y, x)
+        else if (line_map_neighbour.value[counter] > 0 && line_map_neighbour.value[counter] < 9)
+            map_visible.value[y][x] = 1
         return true
     }
     const map = ref(createMap(height.value,width.value,bombs.value))
@@ -88,7 +123,7 @@
     const map_neighbour = computed(()=>{return scan_neighbours()})
     const line_map = computed(()=>{return map.value.reduce((a:number[], b:number[])=>a.concat(b), [])})
     const line_map_visible = computed(()=>{return map_visible.value.reduce((a:number[], b:number[])=>a.concat(b), [])})
-    
+    const line_map_neighbour = computed(()=>{return map_neighbour.value.reduce((a:number[], b:number[])=>a.concat(b), [])}) 
 </script>
 <template>
     <div class="minesweeper">
@@ -102,10 +137,14 @@
                      :pos="i"
                      :mode="line_map[i]"
                      :click_handler="press_click"
-                     :neighbour_handler="check_neighbours">
+                     :neighbours="line_map_neighbour[i]"
+                     >
                     </Square>
                 </div>
             </div>
         </div>
+    </div>
+    <div v-for="lel in map_visible">
+        {{lel}}
     </div>
 </template>
