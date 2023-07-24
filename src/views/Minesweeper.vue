@@ -1,10 +1,13 @@
 <script setup lang="ts">
-    import {ref, computed, toValue} from 'vue';
+    import {ref, computed, watch, getCurrentInstance} from 'vue';
     import Square from '../components/minesweeper/Square.vue' 
+    import Table from '../components/minesweeper/Table.vue'
     const width = ref(10)
     const height = ref(10)
     const bombs = ref(10)
-    const counter = ref(0)
+    const bombs_left = ref(bombs.value)
+    const cells_towin_left = ref(width.value * height.value - bombs.value)
+    const gameover = ref(false)
     function createArray(width:number, height:number): number[][]
     {
         let out: number[][] = new Array(height)
@@ -97,6 +100,10 @@
         }
         return 
     }
+    function restart_function()
+    {
+        alert('restart')
+    }
     function press_click(counter:number):boolean
     {
         let y:number = Math.floor(counter/width.value)
@@ -110,6 +117,7 @@
                         map_visible.value[i][j] = 1
                 }
             alert('you lost')
+            gameover.value = true
             return false
         }
         if (line_map_neighbour.value[counter] == 0)
@@ -124,11 +132,26 @@
     const line_map = computed(()=>{return map.value.reduce((a:number[], b:number[])=>a.concat(b), [])})
     const line_map_visible = computed(()=>{return map_visible.value.reduce((a:number[], b:number[])=>a.concat(b), [])})
     const line_map_neighbour = computed(()=>{return map_neighbour.value.reduce((a:number[], b:number[])=>a.concat(b), [])}) 
+    const bombs_left_change = (out:boolean)=> out ? bombs_left.value-- : bombs_left.value++
+    watch(line_map_visible, (new_val)=>{
+        let total_done:number = new_val.reduce((acc, val) => acc + val, 0)
+        if (total_done == cells_towin_left.value)
+        {
+            alert('You won')
+            gameover.value = true
+        }
+    })
 </script>
 <template>
     <div class="minesweeper">
         <div class="m_window">
-            <div class="m_info"></div>
+            <div class="m_info">
+                <Table
+                 :bombs="bombs_left"
+                 @restart="restart_function()"
+                >
+                </Table>
+            </div>
             <div class="m_outerfield">
                 <div class="m_field" :style="{gridTemplateColumns: gridString(10), gridTemplateRows: gridString(10)}" >
                     <Square
@@ -138,13 +161,15 @@
                      :mode="line_map[i]"
                      :click_handler="press_click"
                      :neighbours="line_map_neighbour[i]"
+                     :gameover="gameover"
+                     @marked_down="(out)=>bombs_left_change(out)"
                      >
                     </Square>
                 </div>
             </div>
         </div>
     </div>
-    <div v-for="lel in map_visible">
-        {{lel}}
+    <div v-for="x in map_visible">
+        {{x}}
     </div>
 </template>
