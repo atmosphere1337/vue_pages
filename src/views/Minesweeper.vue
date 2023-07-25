@@ -8,6 +8,7 @@
     const bombs_left = ref(bombs.value)
     const cells_towin_left = ref(width.value * height.value - bombs.value)
     const gameover = ref(false)
+    const emit = defineEmits(['reset'])
     function createArray(width:number, height:number): number[][]
     {
         let out: number[][] = new Array(height)
@@ -102,7 +103,7 @@
     }
     function restart_function()
     {
-        alert('restart')
+        emit('reset')
     }
     function press_click(counter:number):boolean
     {
@@ -153,7 +154,7 @@
                 </Table>
             </div>
             <div class="m_outerfield">
-                <div class="m_field" :style="{gridTemplateColumns: gridString(10), gridTemplateRows: gridString(10)}" >
+                <div class="m_field" :style="{gridTemplateColumns: gridString(width), gridTemplateRows: gridString(height)}" >
                     <Square
                      v-for="(x, i) in line_map_visible"
                      :vis="x"
@@ -168,8 +169,5 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div v-for="x in map_visible">
-        {{x}}
     </div>
 </template>

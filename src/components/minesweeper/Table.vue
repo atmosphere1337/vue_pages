@@ -27,9 +27,11 @@
     }
 </script>
 <template>
-    <div>
+    <div class="m_info_inner">
         <div>{{ $props.bombs }}</div>
-        <div @click="emit_newgame">Restart</div>
+        <div @click="emit_newgame">
+            Restart 
+        </div>
         <div>{{ time }}</div>
     </div>
 </template>

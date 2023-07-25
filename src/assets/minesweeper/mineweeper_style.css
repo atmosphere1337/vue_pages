@@ -38,3 +38,11 @@
 .m_deadcell{
     background-color: red;
 }
+.m_info_inner{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 100%;
+    align-items: center;
+    font-size: 28px;
+}

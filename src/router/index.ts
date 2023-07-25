@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import CredditView from '../views/CredditView.vue'
-import Minesweeper from '../views/Minesweeper.vue'
+import Minesweeper_proxy from '../views/Minesweeper_proxy.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,7 +19,7 @@ const router = createRouter({
     {
       path: '/minesweeper',
       name: 'minesweeper',
-      component: Minesweeper
+      component: Minesweeper_proxy
     }
   ]
 })
