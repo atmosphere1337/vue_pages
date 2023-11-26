@@ -1,0 +1,9 @@
+services:              
+  nginx-vue:
+    container_name: nginx_vue
+    build: .
+    ports:
+    - "80:80"
+    volumes:
+    - ".:/var/www/html/"
+    - "./docker/conf.d/:/etc/nginx/conf.d"
