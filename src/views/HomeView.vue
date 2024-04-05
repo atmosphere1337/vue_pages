@@ -6,6 +6,7 @@
   <main>
     <RouterLink to="/minesweeper">Minesweeper</RouterLink><br/>
     <RouterLink to="/creddit">Creddit</RouterLink><br/>
+    <RouterLink to="/quiz">Quiz</RouterLink><br/>
     <RouterLink to="/">Home</RouterLink><br/>
   </main>
 </template>
