@@ -1,13 +1,7 @@
 <script setup="ts">
-	import {ref} from 'vue';
+	import {ref, computed} from 'vue';
 	import Card from '../components/quiz/Card.vue';
-	/*
-	 *   mind the notes
-	 *   
-	 *    
-	 *    
-	 *    
-	 */
+	import Answer from '../components/quiz/Answer.vue';
 	const rawData = [
     {
         question: "What is the largest planet in our solar system?",
@@ -38,14 +32,38 @@
 	];
 	// 1. create 2 components and import
 	// now import works. problem was in { }. 
-	// import answer component
+	// interpolation in attribute not working, v-bind
+	// what about react input binding to variable? target.value
+	// why no rerender
 	// ...
-	const igor = ref(0);
+	const step = ref(0);
+	const score = ref(0);
+	const currentQuestion = computed(() => rawData[step.value]);
+	function check(inp) {
+		if (inp == currentQuestion.value.correct) { 
+			score.value++;
+		}
+		if (step.value < rawData.length - 1)
+			step.value++;
+		else {
+			alert(`Result is ${score.value} out of ${rawData.length}`);
+			score.value = 0;
+			step.value = 0;
+		}
+	};
+
 </script>
 <template>
 	<div class="quiz-main">
-		what
-		<Card></Card>
+		<Card v-bind:value="currentQuestion.question">
+			<Answer 
+				v-for="(ans, ind) in currentQuestion.answers" 
+				:key="ind"
+				v-bind:value="ans"
+				v-bind:number="ind"
+				@next="check"
+			/>
+		</Card>
 	</div>
 </template>
 <style>
